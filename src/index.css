@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-black text-slate-200 font-sans antialiased;
+  background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(37, 99, 235, 0.22), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* remove number input spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.94); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.pop {
+  animation: pop 0.25s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pop { animation: none; }
+}
