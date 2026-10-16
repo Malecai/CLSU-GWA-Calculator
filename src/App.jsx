@@ -10,13 +10,14 @@ function getHonor(gwa) {
   if (gwa === null) return null;
   const g = Math.round(gwa * 100) / 100;
   if (g >= 1.0 && g <= 1.5) return { label: "University Scholar", tone: "purple" };
-  if (g >= 1.51 && g <= 1.75) return { label: "College Scholar", tone: "purple" };
+  if (g >= 1.51 && g <= 1.75) return { label: "College Scholar", tone: "orange" };
   if (g >= 1.76 && g <= 2.0) return { label: "Dean's Lister", tone: "blue" };
   return null;
 }
 
 const toneClasses = {
   purple: "bg-purple-500/15 text-purple-300 ring-purple-400/50 shadow-[0_0_40px_-8px_rgba(168,85,247,0.55)]",
+  orange: "bg-orange-500/15 text-orange-300 ring-orange-400/50 shadow-[0_0_40px_-8px_rgba(249,115,22,0.55)]",
   blue: "bg-blue-500/15 text-blue-300 ring-blue-400/50 shadow-[0_0_40px_-8px_rgba(59,130,246,0.6)]",
 };
 
@@ -148,7 +149,7 @@ export default function App() {
               <span className="tnum">1.00 – 1.50</span>
             </li>
             <li className="flex items-center justify-between rounded-lg border border-blue-950 px-4 py-2.5">
-              <span className="text-purple-300">College Scholar</span>
+              <span className="text-orange-300">College Scholar</span>
               <span className="tnum">1.51 – 1.75</span>
             </li>
             <li className="flex items-center justify-between rounded-lg border border-blue-950 px-4 py-2.5">
