@@ -168,11 +168,12 @@ export default function App() {
           >
             <h2 className="font-display text-xl font-bold text-white">Add a subject</h2>
 
-            <div className="mt-4 grid gap-4 sm:grid-cols-[9rem_1fr]">
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <label className="block">
-                <span className="mb-1.5 block text-sm text-slate-400">
-                  Subject code <span className="text-slate-600">(optional)</span>
-                </span>
+                <div className="mb-1.5 flex items-center justify-between text-sm">
+                  <span className="text-slate-400">Subject code</span>
+                  <span className="text-slate-600">optional</span>
+                </div>
                 <input
                   className={inputCls}
                   placeholder="e.g. MATH 101"
@@ -182,9 +183,10 @@ export default function App() {
                 />
               </label>
               <label className="block">
-                <span className="mb-1.5 block text-sm text-slate-400">
-                  Subject name <span className="text-slate-600">(optional)</span>
-                </span>
+                <div className="mb-1.5 flex items-center justify-between text-sm">
+                  <span className="text-slate-400">Subject name</span>
+                  <span className="text-slate-600">optional</span>
+                </div>
                 <input
                   className={inputCls}
                   placeholder="e.g. Calculus I"
