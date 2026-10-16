@@ -129,17 +129,20 @@ export default function App() {
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-400 mb-1">Units</label>
-                    <input
-                      type="number"
-                      step="0.5"
-                      min="0.5"
-                      max="10"
-                      placeholder="e.g. 3"
+                    <select
                       value={units}
                       onChange={(e) => setUnits(e.target.value)}
                       required
-                      className="w-full bg-[#1b2234] border border-slate-700/60 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                      className="w-full bg-[#1b2234] border border-slate-700/60 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="" disabled>Select units</option>
+                      <option value="1">1 unit</option>
+                      <option value="1.5">1.5 units</option>
+                      <option value="2">2 units</option>
+                      <option value="3">3 units</option>
+                      <option value="4">4 units</option>
+                      <option value="5">5 units</option>
+                    </select>
                   </div>
                 </div>
 
