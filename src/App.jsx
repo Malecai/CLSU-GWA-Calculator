@@ -15,6 +15,7 @@ export default function App() {
   const [subjectName, setSubjectName] = useState('');
   const [grade, setGrade] = useState('');
   const [units, setUnits] = useState('');
+  const [draggedIndex, setDraggedIndex] = useState(null);
 
   // Save subjects to localStorage whenever they change
   useEffect(() => {
@@ -66,6 +67,24 @@ export default function App() {
 
   const handleClearAll = () => {
     setSubjects([]);
+  };
+
+  // Drag and Drop Handlers
+  const handleDragStart = (index) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (targetIndex) => {
+    if (draggedIndex === null || draggedIndex === targetIndex) return;
+    const updatedSubjects = [...subjects];
+    const [movedItem] = updatedSubjects.splice(draggedIndex, 1);
+    updatedSubjects.splice(targetIndex, 0, movedItem);
+    setSubjects(updatedSubjects);
+    setDraggedIndex(null);
   };
 
   return (
@@ -174,7 +193,10 @@ export default function App() {
             {/* Your Subjects Card */}
             <div className="bg-[#121622] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-white">Your subjects</h2>
+                <div>
+                  <h2 className="text-lg font-semibold text-white">Your subjects</h2>
+                  <p className="text-xs text-slate-500">Drag and drop rows to reorder</p>
+                </div>
                 {subjects.length > 0 && (
                   <button
                     onClick={handleClearAll}
@@ -201,9 +223,17 @@ export default function App() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/50">
-                      {subjects.map((sub) => (
-                        <tr key={sub.id} className="group hover:bg-[#161c2e]/55 transition">
-                          <td className="py-3.5 pr-4 font-medium text-white">
+                      {subjects.map((sub, index) => (
+                        <tr
+                          key={sub.id}
+                          draggable
+                          onDragStart={() => handleDragStart(index)}
+                          onDragOver={handleDragOver}
+                          onDrop={() => handleDrop(index)}
+                          className="group hover:bg-[#161c2e]/55 transition cursor-grab active:cursor-grabbing"
+                        >
+                          <td className="py-3.5 pr-4 font-medium text-white flex items-center gap-2">
+                            <span className="text-slate-600 group-hover:text-slate-400 select-none" title="Drag to reorder">⠿</span>
                             {sub.code} {sub.name && <span className="text-slate-400 font-normal">({sub.name})</span>}
                           </td>
                           <td className="py-3.5 px-4 text-center font-semibold text-blue-400">{sub.grade}</td>
