@@ -279,11 +279,11 @@ export default function App() {
           {/* Right Column (1 span): GWA Summary & Honor Tiers */}
           <div className="space-y-6">
             
-            {/* Appearance Mode Switch button placed at the top of the GWA panel stack */}
+            {/* Appearance Mode Switch button positioned outside, right-aligned adjacent to top-right of the overall GWA panel */}
             <div className="flex justify-end">
               <button
                 onClick={() => setIsDarkMode(!isDarkMode)}
-                className={`text-xs px-3.5 py-2 rounded-xl border ${isDarkMode ? 'border-slate-700 bg-[#121622] text-slate-200 hover:bg-slate-800 shadow-xl' : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50 shadow-sm'} transition flex items-center gap-1.5 font-medium`}
+                className={`text-xs px-3.5 py-2 rounded-xl border ${isDarkMode ? 'border-slate-800 bg-[#121622] text-slate-200 hover:bg-[#1b2234]' : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'} transition flex items-center gap-1.5 shadow-sm font-medium`}
                 title="Toggle appearance mode"
               >
                 {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
@@ -293,7 +293,7 @@ export default function App() {
             {/* Your GWA Display Card */}
             <div className={`${isDarkMode ? 'bg-[#121622] border-slate-800/80 shadow-xl' : 'bg-white border-slate-200 shadow-sm'} border rounded-2xl p-6 relative overflow-hidden`}>
               <div className={`text-xs font-medium uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Your GWA</div>
-
+              
               {/* 3-Decimal GWA Display */}
               <div className={`text-5xl font-black tracking-tight my-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{gwa}</div>
               
