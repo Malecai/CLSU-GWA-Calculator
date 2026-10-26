@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function App() {
-  const [subjects, setSubjects] = useState([
-    { id: 1, code: 'ITRM 3100', name: '', grade: '1.75', units: '3' }
-  ]);
+  // Initialize subjects from localStorage, defaulting to an empty array []
+  const [subjects, setSubjects] = useState(() => {
+    try {
+      const savedSubjects = localStorage.getItem('clsu_gwa_subjects');
+      return savedSubjects ? JSON.parse(savedSubjects) : [];
+    } catch (error) {
+      return [];
+    }
+  });
+
   const [subjectCode, setSubjectCode] = useState('');
   const [subjectName, setSubjectName] = useState('');
   const [grade, setGrade] = useState('');
   const [units, setUnits] = useState('');
+
+  // Save subjects to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem('clsu_gwa_subjects', JSON.stringify(subjects));
+    } catch (error) {
+      console.error('Failed to save to localStorage', error);
+    }
+  }, [subjects]);
 
   // Calculate GWA
   const totalUnits = subjects.reduce((acc, curr) => acc + (parseFloat(curr.units) || 0), 0);
