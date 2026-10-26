@@ -279,20 +279,20 @@ export default function App() {
           {/* Right Column (1 span): GWA Summary & Honor Tiers */}
           <div className="space-y-6">
             
+            {/* Appearance Mode Switch button placed at the top of the GWA panel stack */}
+            <div className="flex justify-end">
+              <button
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className={`text-xs px-3.5 py-2 rounded-xl border ${isDarkMode ? 'border-slate-700 bg-[#121622] text-slate-200 hover:bg-slate-800 shadow-xl' : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50 shadow-sm'} transition flex items-center gap-1.5 font-medium`}
+                title="Toggle appearance mode"
+              >
+                {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+              </button>
+            </div>
+
             {/* Your GWA Display Card */}
             <div className={`${isDarkMode ? 'bg-[#121622] border-slate-800/80 shadow-xl' : 'bg-white border-slate-200 shadow-sm'} border rounded-2xl p-6 relative overflow-hidden`}>
-              
-              {/* Header row with Appearance Mode Switch adjacent to the top-right side */}
-              <div className="flex items-center justify-between mb-2">
-                <div className={`text-xs font-medium uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Your GWA</div>
-                <button
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                  className={`text-xs px-3 py-1.5 rounded-xl border ${isDarkMode ? 'border-slate-700 bg-[#1b2234] text-slate-200 hover:bg-slate-800' : 'border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200'} transition flex items-center gap-1.5 shadow-sm`}
-                  title="Toggle appearance mode"
-                >
-                  {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-                </button>
-              </div>
+              <div className={`text-xs font-medium uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Your GWA</div>
 
               {/* 3-Decimal GWA Display */}
               <div className={`text-5xl font-black tracking-tight my-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{gwa}</div>
