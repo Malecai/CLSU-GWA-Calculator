@@ -26,6 +26,7 @@ export default function App() {
   const [grade, setGrade] = useState('');
   const [units, setUnits] = useState('');
   const [draggedIndex, setDraggedIndex] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
   // Save subjects to localStorage whenever they change
   useEffect(() => {
@@ -61,19 +62,47 @@ export default function App() {
 
   const currentHonor = getHonorStatus(gwa);
 
-  const handleAddSubject = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     if (!grade || !units) return;
 
-    const newSub = {
-      id: Date.now(),
-      code: subjectCode || `SUBJ ${subjects.length + 1}`,
-      name: subjectName,
-      grade,
-      units
-    };
+    if (editingId !== null) {
+      // Update existing subject
+      setSubjects(subjects.map((sub) => 
+        sub.id === editingId 
+          ? { ...sub, code: subjectCode || `SUBJ`, name: subjectName, grade, units } 
+          : sub
+      ));
+      setEditingId(null);
+    } else {
+      // Add new subject
+      const newSub = {
+        id: Date.now(),
+        code: subjectCode || `SUBJ ${subjects.length + 1}`,
+        name: subjectName,
+        grade,
+        units
+      };
+      setSubjects([...subjects, newSub]);
+    }
 
-    setSubjects([...subjects, newSub]);
+    setSubjectCode('');
+    setSubjectName('');
+    setGrade('');
+    setUnits('');
+  };
+
+  const handleStartEdit = (sub) => {
+    setEditingId(sub.id);
+    setSubjectCode(sub.code);
+    setSubjectName(sub.name || '');
+    setGrade(sub.grade);
+    setUnits(sub.units);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
     setSubjectCode('');
     setSubjectName('');
     setGrade('');
@@ -81,10 +110,12 @@ export default function App() {
   };
 
   const handleDelete = (id) => {
+    if (editingId === id) handleCancelEdit();
     setSubjects(subjects.filter((sub) => sub.id !== id));
   };
 
   const handleClearAll = () => {
+    handleCancelEdit();
     setSubjects([]);
   };
 
@@ -177,11 +208,24 @@ export default function App() {
             </div>
           </div>
 
-          {/* Left Column Top: Add Subject Card (Appears 2nd on mobile, left column top on desktop) */}
+          {/* Left Column Top: Add/Edit Subject Card (Appears 2nd on mobile, left column top on desktop) */}
           <div className="lg:col-span-2 lg:order-1 order-2 space-y-6">
             <div className={`${isDarkMode ? 'bg-[#121622] border-slate-800/80 shadow-xl' : 'bg-white border-slate-200 shadow-sm'} border rounded-2xl p-6`}>
-              <h2 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Add a subject</h2>
-              <form onSubmit={handleAddSubject} className="space-y-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                  {editingId !== null ? 'Edit subject' : 'Add a subject'}
+                </h2>
+                {editingId !== null && (
+                  <button
+                    type="button"
+                    onClick={handleCancelEdit}
+                    className="text-xs text-slate-400 hover:text-slate-200 underline transition"
+                  >
+                    Cancel edit
+                  </button>
+                )}
+              </div>
+              <form onSubmit={handleFormSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -250,12 +294,23 @@ export default function App() {
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className="mt-2 bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-2.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/25"
-                >
-                  Add subject
-                </button>
+                <div className="flex items-center gap-3 mt-2">
+                  <button
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-2.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/25"
+                  >
+                    {editingId !== null ? 'Update subject' : 'Add subject'}
+                  </button>
+                  {editingId !== null && (
+                    <button
+                      type="button"
+                      onClick={handleCancelEdit}
+                      className={`px-4 py-2.5 rounded-xl text-sm font-medium border ${isDarkMode ? 'border-slate-700 text-slate-300 hover:bg-slate-800' : 'border-slate-300 text-slate-700 hover:bg-slate-100'} transition`}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </form>
             </div>
           </div>
@@ -301,7 +356,7 @@ export default function App() {
                           onDragStart={() => handleDragStart(index)}
                           onDragOver={handleDragOver}
                           onDrop={() => handleDrop(index)}
-                          className={`group ${isDarkMode ? 'hover:bg-[#161c2e]/55 text-white' : 'hover:bg-slate-50 text-slate-900'} transition cursor-grab active:cursor-grabbing`}
+                          className={`group ${editingId === sub.id ? (isDarkMode ? 'bg-blue-950/40' : 'bg-blue-50') : (isDarkMode ? 'hover:bg-[#161c2e]/55 text-white' : 'hover:bg-slate-50 text-slate-900')} transition cursor-grab active:cursor-grabbing`}
                         >
                           <td className="py-3.5 pr-4 font-medium flex items-center gap-2">
                             <span className={`${isDarkMode ? 'text-slate-600 group-hover:text-slate-400' : 'text-slate-300 group-hover:text-slate-500'} select-none`} title="Drag to reorder">⠿</span>
@@ -311,6 +366,13 @@ export default function App() {
                           <td className={`py-3.5 px-4 text-center ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{sub.units}</td>
                           <td className="py-3.5 pl-4 text-right">
                             <div className="flex items-center justify-end gap-1">
+                              <button
+                                onClick={() => handleStartEdit(sub)}
+                                className={`${isDarkMode ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'} transition p-1`}
+                                title="Edit subject"
+                              >
+                                ✏️
+                              </button>
                               <button
                                 onClick={() => handleMoveUp(index)}
                                 disabled={index === 0}
